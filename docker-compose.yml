@@ -1,0 +1,34 @@
+# WARNING: Modifying this file will result in a failure!
+version: '3'
+
+services:
+  assessment-4-amq:
+    image: rmohr/activemq:5.15.9
+    container_name: assessment-4-amq
+    networks:
+      - assessment-4-amq
+    volumes:
+      - assessment-4-amq-data:/opt/activemq/data
+    ports:
+      - "61616:61616" # JMS
+      - "8161:8161"
+
+  assessment-4:
+    image: gate.ipb.pt:5050/dsys-assessment-4
+    container_name: assessment-4
+    networks:
+      - assessment-4-amq
+    volumes:
+      - ./src:/src
+    environment:
+      token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0dGggQXNzZXNzbWVudCIsInZhcmlhbnRUaXRsZSI6IlJpbmcgRGl2aWRlIiwic3R1ZGVudE51bWJlciI6MzE0ODY2LCJzdHVkZW50TmFtZSI6IkZlcm5hbmRvIEZ1cnRhZG8iLCJpc3MiOiJEU3lzIiwidmFyaWFudCI6InZhcmlhbnQtMiIsImlhdCI6MTY4Nzc4NTYyMSwiYXNzZXNzbWVudElkIjo2LCJqdGkiOiIxYWY1MWY3My02OGZmLTRjNmQtYWM0MS1kZWQ4M2E3Nzk3MjUiLCJtZW1iZXJJZCI6MTYzMjB9.HYnmTCyBMm5UUKytGU3RSBPQ-ez-l6IXojrNOGOVz5k"
+      variant: "variant-2"
+    ports:
+      - "8989:8989"
+
+volumes:
+  assessment-4-amq-data: { }
+
+networks:
+  assessment-4-amq:
+
